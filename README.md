@@ -1,13 +1,30 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
 # braylees_times_table
+
+## Development
+
+- Install deps: `npm install`
+- Start dev server: `npm run dev` (Express + Vite middleware on :3000)
+
+## Last-5 Attempt Tracking
+
+The app records each answer attempt per problem and displays “X out of the last 5 correct” in Practice and Testing modes.
+
+Schema changes:
+
+- Adds an `Attempt` table (`problemId`, `isCorrect`, `createdAt`).
+
+Apply to the local SQLite DB:
+
+- Option A: `npx prisma migrate dev -n add_attempts`
+- Option B: `npx prisma db push` (no history)
+
+Restart the dev server after applying.
+
+## Celebrate/Upset GIFs
+
+Place your GIFs in `public/gifs/` with names:
+
+- `celebrate1.gif`, `celebrate2.gif`, `celebrate3.gif`
+- `upset1.gif`, `upset2.gif`, `upset3.gif`
+
+Edit `src/gifSelector.js` if you use different names.

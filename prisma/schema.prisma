@@ -16,9 +16,22 @@ model Problem {
   answer    Int
   correct   Int @default(0)
   incorrect Int @default(0)
+  mastered  Boolean @default(false)
+  attempts  Attempt[]
 }
 
 model User {
   id    Int @id @default(1)
   level Int @default(1)
+}
+
+model Attempt {
+  id         Int      @id @default(autoincrement())
+  problemId  Int
+  isCorrect  Boolean
+  createdAt  DateTime @default(now())
+
+  problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@index([problemId, createdAt])
 }

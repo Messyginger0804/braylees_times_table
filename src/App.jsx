@@ -13,6 +13,7 @@ function App() {
   const [filteredProblems, setFilteredProblems] = useState([]);
   const [level, setLevel] = useState(1);
   const [showContent, setShowContent] = useState(false);
+  const [allProblemsMastered, setAllProblemsMastered] = useState(false);
 
   const resetApp = () => {
     setMode(null);
@@ -30,9 +31,9 @@ function App() {
         setProblems(data);
       });
     Swal.fire({
-      title: 'Welcome to your times table flashcards, Braylee!!!',
-      text: 'This will help you learn times tables like your momma and daddy did.',
-      confirmButtonText: 'Start Learning!'
+      title: 'Welcome to your times table flashcards, Braylee!!! 🌈🦄',
+      text: 'This will help you learn times tables like your momma and daddy did. 💖',
+      confirmButtonText: 'Start Learning! ✨'
     }).then(() => {
       setShowContent(true);
     });
@@ -43,14 +44,17 @@ function App() {
   }, []);
 
   useEffect(() => {
+    let currentLevelProblems = [];
     if (level === 1) {
-      setFilteredProblems(shuffleArray(problems.filter(p => {
+      currentLevelProblems = problems.filter(p => {
         const [a, b] = p.problem.split(' x ').map(Number);
         return a <= 5 && b <= 5;
-      })));
+      });
     } else {
-      setFilteredProblems(shuffleArray(problems));
+      currentLevelProblems = problems;
     }
+    setFilteredProblems(shuffleArray(currentLevelProblems));
+    setAllProblemsMastered(currentLevelProblems.every(p => p.mastered));
   }, [level, problems]);
 
   const shuffleArray = (array) => {
@@ -84,11 +88,11 @@ function App() {
         <Header onReset={resetApp} />
         <div className="flex flex-col items-center justify-center text-center p-4">
           <LevelIndicator level={level} />
-          <h1 className="text-4xl md:text-6xl font-gochi-hand text-pink-500 mb-8">Choose Your Mode</h1>
+          <h1 className="text-4xl md:text-6xl font-gochi-hand text-pink-500 mb-8">Choose Your Mode ✨</h1>
           <div className="flex flex-col md:flex-row">
-            <button onClick={() => setMode('memorize')} className="px-8 py-4 text-2xl rounded-lg cursor-pointer bg-pink-400 text-white border-none hover:bg-pink-500 mb-4 md:mb-0 md:mr-4">Memorize Mode</button>
-            <button onClick={() => setMode('practice')} className="px-8 py-4 text-2xl rounded-lg cursor-pointer bg-teal-400 text-white border-none hover:bg-teal-500 mb-4 md:mb-0 md:mr-4">Practice Mode</button>
-            <button onClick={() => setMode('testing')} className="px-8 py-4 text-2xl rounded-lg cursor-pointer bg-purple-400 text-white border-none hover:bg-purple-500">Testing Mode</button>
+            <button onClick={() => setMode('memorize')} className="px-8 py-4 text-2xl rounded-lg cursor-pointer bg-pink-400 text-white border-none hover:bg-pink-500 mb-4 md:mb-0 md:mr-4">Memorize Mode 🧠💖</button>
+            <button onClick={() => setMode('practice')} className="px-8 py-4 text-2xl rounded-lg cursor-pointer bg-teal-400 text-white border-none hover:bg-teal-500 mb-4 md:mb-0 md:mr-4">Practice Mode ✏️✨</button>
+            <button onClick={() => setMode('testing')} className={`px-8 py-4 text-2xl rounded-lg cursor-pointer bg-purple-400 text-white border-none ${allProblemsMastered ? 'hover:bg-purple-500' : 'opacity-50 cursor-not-allowed'}`} disabled={!allProblemsMastered}>Testing Mode 🧪🌟</button>
           </div>
         </div>
       </div>

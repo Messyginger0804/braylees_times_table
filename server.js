@@ -34,6 +34,56 @@ app.post('/api/problems/:id/score', async (req, res) => {
   res.json({ success: true });
 });
 
+// Record a single attempt (for last-5 tracking)
+app.post('/api/problems/:id/attempt', async (req, res) => {
+  const { id } = req.params;
+  const { correct } = req.body;
+  const problemId = parseInt(id);
+
+  if (typeof correct !== 'boolean') {
+    return res.status(400).json({ error: 'Missing boolean `correct`' });
+  }
+
+  // Create attempt row
+  await prisma.attempt.create({
+    data: { problemId, isCorrect: correct },
+  });
+
+  // Optionally keep existing aggregate counters in sync
+  const problem = await prisma.problem.findUnique({ where: { id: problemId } });
+  if (problem) {
+    if (correct) {
+      await prisma.problem.update({ where: { id: problemId }, data: { correct: problem.correct + 1 } });
+    } else {
+      await prisma.problem.update({ where: { id: problemId }, data: { incorrect: problem.incorrect + 1 } });
+    }
+  }
+
+  res.json({ success: true });
+});
+
+// Get summary of the last 5 attempts for a problem
+app.get('/api/problems/:id/last5', async (req, res) => {
+  const { id } = req.params;
+  const problemId = parseInt(id);
+  const attempts = await prisma.attempt.findMany({
+    where: { problemId },
+    orderBy: { createdAt: 'desc' },
+    take: 5,
+  });
+  const correctCount = attempts.filter(a => a.isCorrect).length;
+  res.json({ correctCount, totalCount: attempts.length, attempts });
+});
+
+app.post('/api/problems/:id/mastered', async (req, res) => {
+  const { id } = req.params;
+  await prisma.problem.update({
+    where: { id: parseInt(id) },
+    data: { mastered: true },
+  });
+  res.json({ success: true });
+});
+
 app.get('/api/user', async (req, res) => {
   const user = await prisma.user.findUnique({
     where: { id: 1 },

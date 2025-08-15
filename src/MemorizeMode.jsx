@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import LevelIndicator from './LevelIndicator';
 import Header from './Header';
+import { emoji } from './emoji';
 
 function MemorizeMode({ problems, level, onReset }) {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -26,7 +27,7 @@ function MemorizeMode({ problems, level, onReset }) {
       <Header onReset={onReset} />
       <div className="flex flex-col items-center justify-center text-center p-4">
         <LevelIndicator level={level} />
-        <h1 className="text-4xl md:text-6xl font-gochi-hand text-pink-500 mb-8">Memorize Mode</h1>
+        <h1 className="text-4xl md:text-6xl font-gochi-hand text-pink-500 mb-8">Memorize Mode 🧠💖</h1>
         <div className="w-64 h-40 md:w-72 md:h-48 [perspective:1000px] cursor-pointer mb-8" onClick={handleCardClick}>
           <div className={`relative w-full h-full text-center transition-transform duration-500 [transform-style:preserve-3d] shadow-lg ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}>
             <div className="absolute w-full h-full backface-hidden flex items-center justify-center text-3xl md:text-4xl rounded-lg bg-teal-300 text-white">
@@ -37,7 +38,7 @@ function MemorizeMode({ problems, level, onReset }) {
             </div>
           </div>
         </div>
-        <button onClick={handleNextCard} className="px-6 py-3 md:px-8 md:py-4 text-xl md:text-2xl rounded-lg cursor-pointer bg-purple-400 text-white border-none hover:bg-purple-500 mb-4">Next</button>
+        <button onClick={handleNextCard} className="px-6 py-3 md:px-8 md:py-4 text-xl md:text-2xl rounded-lg cursor-pointer bg-purple-400 text-white border-none hover:bg-purple-500 mb-4">Next {emoji.next()}</button>
       </div>
     </div>
   );
