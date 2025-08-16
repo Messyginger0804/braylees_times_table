@@ -20,11 +20,6 @@ model Problem {
   attempts  Attempt[]
 }
 
-model User {
-  id    Int @id @default(1)
-  level Int @default(1)
-}
-
 model Attempt {
   id         Int      @id @default(autoincrement())
   problemId  Int
@@ -34,4 +29,22 @@ model Attempt {
   problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
   @@index([problemId, createdAt])
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  pin       String?
+  image     String?
+  level     Int      @default(1)
+  createdAt DateTime @default(now())
+  tests     Test[]
+}
+
+model Test {
+  id        Int      @id @default(autoincrement())
+  score     Int
+  createdAt DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }
