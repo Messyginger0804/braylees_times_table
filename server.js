@@ -100,6 +100,33 @@ app.post('/api/user/level', async (req, res) => {
   res.json({ success: true });
 });
 
+app.post('/api/test/score', async (req, res) => {
+  const { score } = req.body;
+  await prisma.test.create({
+    data: {
+      score,
+    },
+  });
+  res.json({ success: true });
+});
+
+app.get('/api/test/best', async (req, res) => {
+  const bestScore = await prisma.test.findFirst({
+    orderBy: {
+      score: 'desc',
+    },
+  });
+  res.json(bestScore);
+});
+
+app.post('/api/message/send', (req, res) => {
+  const { message } = req.body;
+  console.log(`Sending message: ${message}`);
+  // In a real application, you would have the logic to send the message
+  // to Facebook Messenger here.
+  res.json({ success: true });
+});
+
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('dist'));
 } else {

@@ -35,3 +35,10 @@ model Attempt {
 
   @@index([problemId, createdAt])
 }
+
+model Test {
+  id        Int      @id @default(autoincrement())
+  score     Int
+  createdAt DateTime @default(now())
+  userId    Int      @default(1)
+}

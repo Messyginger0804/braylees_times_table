@@ -92,7 +92,7 @@ function App() {
           <div className="flex flex-col md:flex-row">
             <button onClick={() => setMode('memorize')} className="px-8 py-4 text-2xl rounded-lg cursor-pointer bg-pink-400 text-white border-none hover:bg-pink-500 mb-4 md:mb-0 md:mr-4">Memorize Mode 🧠💖</button>
             <button onClick={() => setMode('practice')} className="px-8 py-4 text-2xl rounded-lg cursor-pointer bg-teal-400 text-white border-none hover:bg-teal-500 mb-4 md:mb-0 md:mr-4">Practice Mode ✏️✨</button>
-            <button onClick={() => setMode('testing')} className={`px-8 py-4 text-2xl rounded-lg cursor-pointer bg-purple-400 text-white border-none ${allProblemsMastered ? 'hover:bg-purple-500' : 'opacity-50 cursor-not-allowed'}`} disabled={!allProblemsMastered}>Testing Mode 🧪🌟</button>
+            <button onClick={() => setMode('testing')} className={`px-8 py-4 text-2xl rounded-lg cursor-pointer bg-purple-400 text-white border-none hover:bg-purple-500`}>Testing Mode 🧪🌟</button>
           </div>
         </div>
       </div>

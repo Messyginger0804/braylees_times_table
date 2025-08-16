@@ -5,6 +5,7 @@ import Header from './Header';
 import { getRandomCelebrateGif, getRandomUpsetGif } from './gifSelector';
 import { emoji } from './emoji';
 import { triggerFireworks } from './fireworks';
+import axios from 'axios';
 
 function TestingMode({ problems, level, onLevelUp, onReset }) {
   const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
@@ -18,6 +19,21 @@ function TestingMode({ problems, level, onLevelUp, onReset }) {
   const [streak, setStreak] = useState(0);
   const [showStreakToast, setShowStreakToast] = useState(false);
   const [streakToastCount, setStreakToastCount] = useState(0);
+  const [isNewHighScore, setIsNewHighScore] = useState(false);
+
+  const handleGameOver = async () => {
+    try {
+      await axios.post('/api/test/score', { score });
+      const { data: bestScore } = await axios.get('/api/test/best');
+      if (score > (bestScore?.score || 0)) {
+        setIsNewHighScore(true);
+        await axios.post('/api/message/send', { message: `Braylee got a new high score of ${score}!` });
+      }
+    } catch (error) {
+      console.error("Error handling game over:", error);
+    }
+  };
+
 
   const restartGame = () => {
     setCurrentProblemIndex(0);
@@ -87,7 +103,7 @@ function TestingMode({ problems, level, onLevelUp, onReset }) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ correct: true })
         });
-        setScore(score + 1);
+        setScore(score + 2);
         // Brief celebrate on each correct answer
         await Swal.fire({
           title: `Correct! ${emoji.party()}${emoji.heart()}`,
@@ -118,6 +134,7 @@ function TestingMode({ problems, level, onLevelUp, onReset }) {
             });
           }
           setGameOver(true);
+          handleGameOver();
         } else {
           setCurrentProblemIndex(currentProblemIndex + 1);
           setIsFlipped(false); // Flip back for next problem
@@ -140,6 +157,7 @@ function TestingMode({ problems, level, onLevelUp, onReset }) {
           background: 'transparent',
         });
         setGameOver(true);
+        handleGameOver();
       }
       setUserAnswer('');
       // Refresh last-5 summary for this problem
@@ -154,6 +172,7 @@ function TestingMode({ problems, level, onLevelUp, onReset }) {
         <div className="flex flex-col items-center justify-center text-center p-4">
           <LevelIndicator level={level} />
           <h1 className="text-4xl md:text-6xl font-gochi-hand text-pink-500 mb-8">Game Over</h1>
+          {isNewHighScore && <div className="text-2xl mb-4">New High Score!</div>}
           <div className="text-2xl mb-4">Your final score is: {score}</div>
           <button onClick={restartGame} className="px-6 py-3 md:px-8 md:py-4 text-xl md:text-2xl rounded-lg cursor-pointer bg-pink-400 text-white border-none hover:bg-pink-500">Try Again {emoji.retry()}</button>
         </div>
@@ -185,7 +204,7 @@ function TestingMode({ problems, level, onLevelUp, onReset }) {
             </div>
           </div>
         </div>
-        {showLast5 && last5.totalCount > 0 && last5.correctCount > 0 && (
+        {showLast5 && last5.totalCount > 0 && last5.correctCount > 1 && (
           <div className="mb-4 text-lg text-gray-700 wave-in">
             You have answered this right {last5.correctCount} out of the last {Math.min(5, last5.totalCount || 0)} times. {emoji.heart()}
           </div>
