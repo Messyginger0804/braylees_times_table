@@ -2,6 +2,7 @@ import { useState } from 'react';
 import LevelIndicator from './LevelIndicator';
 import Header from './Header';
 import { emoji } from './emoji';
+import axios from 'axios';
 
 function MemorizeMode({ problems, level, onReset }) {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -17,7 +18,16 @@ function MemorizeMode({ problems, level, onReset }) {
   };
 
   if (problems.length === 0) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-200 to-purple-200 relative">
+        <Header onReset={onReset} />
+        <div className="flex flex-col items-center justify-center text-center p-8">
+          <h1 className="text-4xl md:text-6xl font-gochi-hand text-pink-500 mb-4">No Problems Yet</h1>
+          <p className="text-lg text-gray-700 mb-6">There aren’t any problems available for this level right now.</p>
+          <button onClick={onReset} className="px-6 py-3 md:px-8 md:py-4 text-xl md:text-2xl rounded-lg cursor-pointer bg-purple-400 text-white border-none hover:bg-purple-500">Back to Main Menu</button>
+        </div>
+      </div>
+    );
   }
 
   const currentCard = problems[currentCardIndex];

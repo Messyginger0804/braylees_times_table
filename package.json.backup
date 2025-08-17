@@ -4,17 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "dev:api": "node server.js",
-    "dev:all": "npm run db:deploy && concurrently \"npm run dev:api\" \"npm run dev\"",
+    "dev": "node server.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "seed": "node prisma/seed.js",
-    "db:deploy": "prisma migrate deploy && prisma db seed",
-    "db:seed": "prisma db seed"
-  },
-  "prisma": {
     "seed": "node prisma/seed.js"
   },
   "dependencies": {
@@ -35,7 +28,6 @@
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.21",
-    "concurrently": "^9.2.0",
     "eslint": "^9.33.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
