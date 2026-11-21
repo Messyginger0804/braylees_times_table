@@ -9,7 +9,7 @@
 
 ## Migrations and seeding
 - One migration in `prisma/migrations/` (`20250816031219_init`), which includes the `Attempt` table. `README.md` describes `npx prisma migrate dev` or `npx prisma db push` for local DBs.
-- `npm run seed` runs `prisma/seed.js`: it deletes all `Problem` rows (which cascades to attempts), upserts user 1 at level 1, then creates the 1x1 through 5x5 problems. Do not run it against a DB whose progress you want to keep.
+- `npm run seed` runs `prisma/seed.js`: it deletes all `Problem` rows (which cascades to attempts), upserts user 1 (level 1 only when the row is created; an existing user keeps its level, so the seed cannot reset it), then creates the 1x1 through 5x5 problems. Do not run it against a DB whose progress you want to keep.
 
 ## Environment
 - Only `DATABASE_URL` is used by the app (read by Prisma). Values live in a local `.env`; do not copy or print them.
